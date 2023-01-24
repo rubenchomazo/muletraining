@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>c96d50fa-22d9-4b2c-a8cb-4b0b36dd3a7f</groupId>
+  <artifactId>test-american-flights-api</artifactId>
+  <version>1.0.1</version>
+  <name>Test American Flights API</name>
+  <properties>
+    <classifier>raml</classifier>
+    <main>test-american-flights-api.raml</main>
+    <status>published</status>
+    <originalFormatVersion>1.0</originalFormatVersion>
+    <apiVersion>v1</apiVersion>
+    <projectId>20bafdf1-25fb-409f-b158-7711a22004b2</projectId>
+    <branchId>master</branchId>
+    <commitId>8e58d259b868212a5afce2e4cc8f607617da0048</commitId>
+    <keywords/>
+    <type>rest-api</type>
+    <mainFile>test-american-flights-api.raml</mainFile>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>68ef9520-24e9-4cf2-b2f5-620025690913</groupId>
+      <version>1.0.1</version>
+      <type>zip</type>
+      <classifier>raml-fragment</classifier>
+      <artifactId>training-american-flight-data-type</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>68ef9520-24e9-4cf2-b2f5-620025690913</groupId>
+      <version>1.0.1</version>
+      <type>zip</type>
+      <classifier>raml-fragment</classifier>
+      <artifactId>training-american-flights-example</artifactId>
+    </dependency>
+  </dependencies>
+  <repositories>
+    <repository>
+      <id>anypoint-exchange</id>
+      <url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+    </repository>
+  </repositories>
+</project>

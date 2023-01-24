@@ -1,0 +1,29 @@
+{
+  "configs": [
+    "API_Spefication.xml",
+    "Mule_App.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:training_mulesoft:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.4.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "API_Spefication.xml",
+        "application-types.xml",
+        "examples/flight-example.json",
+        "examples/flights-example.json",
+        "log4j2.xml",
+        "Mule_App.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
