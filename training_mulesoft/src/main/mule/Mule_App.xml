@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="253b339c-c013-4c09-a4ed-f9b33cc5d564">
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="fb2bdfc2-7775-4b07-9b1f-79bdfd2c901c" >
+		<db:my-sql-connection host="localhost" port="3308" user="root" password="my-secret-pw" database="mysql" />
+	</db:config>
+	<flow name="training_mulesoft_get" doc:id="6fca95c8-b151-4d9e-b53c-268d473d46f2" >
+		<http:listener doc:name="Listener" doc:id="743e2cc4-e462-4273-b534-6ccce1895637" config-ref="HTTP_Listener_config" path="/flights" allowedMethods="GET"/>
+		<db:select doc:name="Select" doc:id="eeef081b-b93e-453e-8229-7a8d1cef3e92" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM unitedDB.flights;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="085ac548-62fd-4329-b216-03b98a929941" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	flightCode: payload01.code,
+	fromAirportCode: payload01.origin default "",
+	toAirportCode: payload01.destination default "",
+	departureDate: payload01.departure_date as String default "",
+	emptySeats: payload01.empty_seats default 0,
+	price: payload01.price default 0,
+	planeType: payload01.plane as String default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="bf2c203d-254e-431a-a38e-76aedbf876e8" />
+	</flow>
+	<flow name="training_mulesoft_post" doc:id="d3797550-5d16-45d5-86da-e228d32295a0" >
+		<http:listener doc:name="Listener" doc:id="383b6fb6-c85a-432d-9f80-701e1adf9994" config-ref="HTTP_Listener_config" path="/flights" allowedMethods="POST"/>
+		<db:insert doc:name="Insert" doc:id="48f52650-f83c-43d3-8956-ad67976e3964" config-ref="Database_Config">
+			<db:sql ><![CDATA[INSERT INTO unitedDB.flights
+(code, price, departure_date, origin, destination, empty_seats, plane)
+VALUES(:code, :price, :departure_date, :origin, :destination, :empty_seats, :plane);
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	"code" : payload.code,
+	"price" : payload.price,
+	"departure_date" : payload.departureDate,
+	"origin" : payload.origin,
+	"destination" : payload.destination,
+	"empty_seats" : payload.emptySeats,
+	"plane" : payload.plane
+}]]]></db:input-parameters>
+		</db:insert>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="0400c401-c317-4b4c-95ad-f1371c552391" />
+	</flow>
+</mule>
